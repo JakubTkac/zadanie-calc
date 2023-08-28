@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ReactNode } from "react";
-import { COLOR, FONT_SIZE, FONT_WEIGHT } from "../../Theme";
+import { COLOR, FONT_SIZE, FONT_WEIGHT, SCREENS } from "../../Theme";
 
 interface IButtonProps {
   onClick: () => void;
@@ -21,6 +21,9 @@ const StyledButton = styled.button<IButtonProps>`
   cursor: pointer;
   left: 1.5rem;
   font-size: ${FONT_SIZE.L};
+  @media (max-width: ${SCREENS.LG}) {
+    width: 100%;
+  }
 `;
 
 const Button: React.FC<IButtonProps> = ({

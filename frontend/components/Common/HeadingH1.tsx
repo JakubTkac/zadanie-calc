@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLOR, FONT_SIZE, FONT_WEIGHT } from "../../Theme";
+import { COLOR, FONT_SIZE, FONT_WEIGHT, SCREENS } from "../../Theme";
 import React, { ReactNode } from "react";
 
 interface IHeadingH1Props {
@@ -13,6 +13,13 @@ const StyledHeadingH1 = styled.h1<IHeadingH1Props>`
   font-size: ${(props) => props.fontSize || FONT_SIZE.XXXXL};
   font-weight: ${FONT_WEIGHT.BOLDEST};
   margin-bottom: 4rem;
+  @media (max-width: ${SCREENS.SM}) {
+    margin-bottom: 1rem;
+    font-size: ${(props) =>
+      props.fontSize
+        ? `calc(${props.fontSize} - 0.5rem)`
+        : `calc(${FONT_SIZE.XXXXL} - 0.5rem)`};
+  }
 `;
 
 const HeadingH1: React.FC<IHeadingH1Props> = ({

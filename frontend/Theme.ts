@@ -21,6 +21,7 @@ export const COLOR = {
   WHITE_HEADING: "#fefefe",
   BLACK: "#000000",
   BACKGROUND_BLUE: "#173261",
+  BLUE: "#0a05ff",
   DARKER_GRAY: "#555755",
   DARK_GRAY: "#070806",
 };

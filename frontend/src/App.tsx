@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
-import { COLOR } from "../Theme";
+import { COLOR, SCREENS } from "../Theme";
 import HeadingH1 from "../components/Common/HeadingH1";
 import Calculator from "../components/Calculator/Calculator";
 
@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
     background: ${COLOR.BACKGROUND_BLUE};
     color: ${COLOR.BLACK};
     box-sizing: border-box;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    font-family: Open-Sans, Helvetica, Sans-Serif,serif;
   }
   input {
     border: none;
@@ -40,6 +40,24 @@ const StyledContentWrapper = styled.main`
   align-items: flex-start;
   padding: 0 20rem;
   height: 100vh;
+  @media (max-width: ${SCREENS.XL}) {
+    padding: 0 14rem;
+  }
+  @media (max-width: ${SCREENS.LG}) {
+    padding: 0 10rem;
+  }
+  @media (max-width: ${SCREENS.L}) {
+    padding: 0 6rem;
+  }
+  @media (max-width: ${SCREENS.MD}) {
+    padding: 0 4rem;
+  }
+  @media (max-width: ${SCREENS.SM}) {
+    padding: 0 1rem;
+  }
+  @media (max-width: ${SCREENS.SM}) {
+    padding: 4px;
+  }
 `;
 
 function App() {

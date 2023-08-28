@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FlagItems from "../Calculator/FlagItems";
+import { FONT_WEIGHT } from "../../Theme";
 
 export interface IRate {
   name: string;
@@ -20,10 +21,10 @@ const StyledSelectContainer = styled.div`
   align-items: center;
   height: 100%;
   select {
-    font-weight: 700;
+    font-weight: ${FONT_WEIGHT.BOLDER};
   }
   option {
-    font-weight: 500;
+    font-weight: ${FONT_WEIGHT.REGULAR};
   }
   img {
     width: 25px;

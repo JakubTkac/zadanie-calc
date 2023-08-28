@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLOR, FONT_SIZE, FONT_WEIGHT } from "../../Theme";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 interface ILabelProps {
   color?: string;

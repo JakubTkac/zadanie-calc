@@ -5,6 +5,7 @@ import CalculatorItems from "./CalculatorItems";
 import Select from "../Common/Select";
 import { useEffect, useState } from "react";
 import Button from "../Common/Button";
+import { COLOR, FONT_SIZE, SCREENS } from "../../Theme";
 
 const StyledCalculatorWrapper = styled.div`
   display: flex;
@@ -13,11 +14,14 @@ const StyledCalculatorWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: #ffffff;
-  border: 2px solid #000000;
+  background-color: ${COLOR.WHITE};
+  border: 2px solid ${COLOR.BLACK};
   border-radius: 20px;
-  box-shadow: 0px 16px 0px 1px #000000;
+  box-shadow: 0px 16px 0px 1px ${COLOR.BLACK};
   padding: 1rem 2rem;
+  @media (max-width: ${SCREENS.XS}) {
+    padding: 1rem 0.5rem;
+  }
 `;
 
 const StyledCalculatorFlex = styled.div`
@@ -31,8 +35,18 @@ const StyledCalculatorFlex = styled.div`
   svg {
     position: relative;
     height: 100%;
-    font-size: 2rem;
+    font-size: ${FONT_SIZE.XXXL};
     top: 10px;
+  }
+  h2 {
+    width: 50%;
+    @media (max-width: ${SCREENS.LG}) {
+      width: 100%;
+    }
+  }
+  @media (max-width: ${SCREENS.LG}) {
+    flex-direction: column;
+    align-items: flex-end;
   }
 `;
 
@@ -45,10 +59,13 @@ const StyledCurrencyContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 0.5rem;
+  @media (max-width: ${SCREENS.LG}) {
+    width: 100%;
+  }
 `;
 
 const StyledInputCurrencyContainer = styled.div`
-  border: 1px solid #555755;
+  border: 1px solid ${COLOR.DARKER_GRAY};
   box-sizing: border-box;
   border-radius: 10px;
   height: 4rem;
@@ -58,15 +75,32 @@ const StyledInputCurrencyContainer = styled.div`
   align-items: center;
   padding: 0 1rem;
   input {
+    color: ${COLOR.DARK_GRAY};
     appearance: textfield;
     width: 100%;
     height: 100%;
   }
   span {
+    color: ${COLOR.DARK_GRAY};
     display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
+  }
+  @media (max-width: ${SCREENS.XS}) {
+    flex-direction: column;
+  }
+`;
+const StyledButtonWrapper = styled.div`
+  width: 50%;
+  @media (max-width: ${SCREENS.LG}) {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 2rem;
+  }
+  @media (max-width: ${SCREENS.XS}) {
+    padding-right: 1.5rem;
   }
 `;
 
@@ -158,16 +192,16 @@ const Calculator = () => {
             {`${selectedAmountRate} ${selectedAmountName} = `}
             <span
               style={{
-                color: "#0a05ff",
+                color: COLOR.BLUE,
               }}
             >
               {selectedCalculationRate}
             </span>{" "}
             {selectedCalculationName}
           </h2>
-          <div style={{ width: "50%" }}>
+          <StyledButtonWrapper>
             <Button onClick={handleCalculate}>Prepocitat</Button>
-          </div>
+          </StyledButtonWrapper>
         </StyledCalculatorFlex>
       </StyledCalculatorWrapper>
     </>
