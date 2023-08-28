@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import FlagItems from "../Calculator/FlagItems";
 
 export interface IRate {
   name: string;
@@ -24,6 +25,11 @@ const StyledSelectContainer = styled.div`
   option {
     font-weight: 500;
   }
+  img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -40,6 +46,8 @@ const Select: React.FC<ISelectProps> = ({
   onSelectRate,
   onSelectName,
 }) => {
+  const [selectedFlag, setSelectedFlag] = useState<string | null>(null);
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRateName = event.target.value;
     const selectedRate = data.find(
@@ -49,6 +57,15 @@ const Select: React.FC<ISelectProps> = ({
     if (selectedRate) {
       onSelectRate(selectedRate.rate);
       onSelectName(selectedRate.name);
+
+      const selectedFlagItem = FlagItems.find(
+        (item) => item.name === selectedRate.name,
+      );
+      if (selectedFlagItem) {
+        setSelectedFlag(selectedFlagItem.flag);
+      } else {
+        setSelectedFlag(null);
+      }
     }
   };
 
@@ -66,6 +83,7 @@ const Select: React.FC<ISelectProps> = ({
 
   return (
     <StyledSelectContainer>
+      {selectedFlag && <img alt={selectedFlag} src={selectedFlag} />}
       <StyledSelect disabled={disabled} onChange={handleSelectChange}>
         {options}
       </StyledSelect>
