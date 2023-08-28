@@ -1,5 +1,7 @@
 import styled, { createGlobalStyle } from "styled-components";
 import { COLOR } from "../Theme";
+import HeadingH1 from "../components/Common/HeadingH1";
+import Calculator from "../components/Calculator/Calculator";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -45,7 +47,8 @@ function App() {
     <>
       <GlobalStyle />
       <StyledContentWrapper>
-        <div>test</div>
+        <HeadingH1>Menova Kalkulacka</HeadingH1>
+        <Calculator></Calculator>
       </StyledContentWrapper>
     </>
   );
