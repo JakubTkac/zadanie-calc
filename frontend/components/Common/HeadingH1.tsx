@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { COLOR, FONT_SIZE, FONT_WEIGHT, SCREENS } from "../../Theme";
-import { ReactNode } from "react";
+import { COLOR, FONT_SIZE, FONT_WEIGHT } from "../../Theme";
+import React, { ReactNode } from "react";
 
 interface IHeadingH1Props {
   color?: string;
