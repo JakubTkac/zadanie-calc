@@ -3,7 +3,7 @@ import Label from "../Common/Label";
 import { IoSwapHorizontal } from "react-icons/io5";
 import CalculatorItems from "./CalculatorItems";
 import Select from "../Common/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Common/Button";
 
 const StyledCalculatorWrapper = styled.div`
@@ -69,6 +69,7 @@ const StyledInputCurrencyContainer = styled.div`
     height: 100%;
   }
 `;
+
 const Calculator = () => {
   const [selectedAmountRate, setSelectedAmountRate] = useState<number | null>(
     null,
@@ -101,6 +102,12 @@ const Calculator = () => {
     }
   };
 
+  const handleSwapValues = () => {};
+
+  useEffect(() => {
+    handleCalculate();
+  }, [inputValue, selectedCalculationRate]);
+
   return (
     <>
       <StyledCalculatorWrapper>
@@ -110,8 +117,15 @@ const Calculator = () => {
             <StyledInputCurrencyContainer>
               <input
                 value={inputValue}
-                onChange={(e) => setInputValue(parseFloat(e.target.value))}
-                type="number"
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (/^\d*\.?\d{0,2}$/.test(newValue)) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    setInputValue(newValue);
+                  }
+                }}
+                type="text"
                 min="0"
                 defaultValue={1}
               />
@@ -123,11 +137,13 @@ const Calculator = () => {
               ></Select>
             </StyledInputCurrencyContainer>
           </StyledCurrencyContainer>
-          <IoSwapHorizontal></IoSwapHorizontal>
+          <IoSwapHorizontal onClick={handleSwapValues}></IoSwapHorizontal>
           <StyledCurrencyContainer>
             <Label>Prepocet</Label>
             <StyledInputCurrencyContainer>
-              <span>{calculatedResult}</span>
+              <span>
+                {calculatedResult !== null ? calculatedResult.toFixed(2) : ""}
+              </span>
               <Select
                 data={CalculatorItems.rates}
                 disabled={false}
@@ -138,7 +154,17 @@ const Calculator = () => {
           </StyledCurrencyContainer>
         </StyledCalculatorFlex>
         <StyledCalculatorFlex>
-          <h2>{`${selectedAmountRate} ${selectedAmountName} = ${selectedCalculationRate} ${selectedCalculationName}`}</h2>
+          <h2>
+            {`${selectedAmountRate} ${selectedAmountName} = `}
+            <span
+              style={{
+                color: "#0a05ff",
+              }}
+            >
+              {selectedCalculationRate}
+            </span>{" "}
+            {selectedCalculationName}
+          </h2>
           <div style={{ width: "50%" }}>
             <Button onClick={handleCalculate}>Prepocitat</Button>
           </div>
