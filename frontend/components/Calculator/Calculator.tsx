@@ -4,6 +4,7 @@ import { IoSwapHorizontal } from "react-icons/io5";
 import CalculatorItems from "./CalculatorItems";
 import Select from "../Common/Select";
 import { useState } from "react";
+import Button from "../Common/Button";
 
 const StyledCalculatorWrapper = styled.div`
   display: flex;
@@ -57,10 +58,13 @@ const StyledInputCurrencyContainer = styled.div`
   align-items: center;
   padding: 0 1rem;
   input {
+    appearance: textfield;
     width: 100%;
     height: 100%;
   }
   span {
+    display: flex;
+    align-items: center;
     width: 100%;
     height: 100%;
   }
@@ -75,6 +79,8 @@ const Calculator = () => {
   const [selectedAmountName, setSelectedAmountName] = useState<string>("");
   const [selectedCalculationName, setSelectedCalculationName] =
     useState<string>("");
+  const [calculatedResult, setCalculatedResult] = useState<number | null>(null);
+  const [inputValue, setInputValue] = useState<number>(1);
 
   const handleSelectedAmountRate = (selectedRate: number) => {
     setSelectedAmountRate(selectedRate);
@@ -88,6 +94,12 @@ const Calculator = () => {
   const handleSelectedCalculationName = (selectedRate: string) => {
     setSelectedCalculationName(selectedRate);
   };
+  const handleCalculate = () => {
+    if (selectedCalculationRate !== null) {
+      const result = inputValue * selectedCalculationRate;
+      setCalculatedResult(result);
+    }
+  };
 
   return (
     <>
@@ -96,7 +108,13 @@ const Calculator = () => {
           <StyledCurrencyContainer>
             <Label>Suma</Label>
             <StyledInputCurrencyContainer>
-              <input defaultValue={1}></input>
+              <input
+                value={inputValue}
+                onChange={(e) => setInputValue(parseFloat(e.target.value))}
+                type="number"
+                min="0"
+                defaultValue={1}
+              />
               <Select
                 data={[{ name: "EUR", rate: 1 }]}
                 disabled={true}
@@ -109,7 +127,7 @@ const Calculator = () => {
           <StyledCurrencyContainer>
             <Label>Prepocet</Label>
             <StyledInputCurrencyContainer>
-              <span></span>
+              <span>{calculatedResult}</span>
               <Select
                 data={CalculatorItems.rates}
                 disabled={false}
@@ -121,7 +139,9 @@ const Calculator = () => {
         </StyledCalculatorFlex>
         <StyledCalculatorFlex>
           <h2>{`${selectedAmountRate} ${selectedAmountName} = ${selectedCalculationRate} ${selectedCalculationName}`}</h2>
-          <button>Prepocitat</button>
+          <div style={{ width: "50%" }}>
+            <Button onClick={handleCalculate}>Prepocitat</Button>
+          </div>
         </StyledCalculatorFlex>
       </StyledCalculatorWrapper>
     </>
