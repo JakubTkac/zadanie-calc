@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import * as xml2js from 'xml2js';
 import axios from 'axios';
 
@@ -18,19 +18,28 @@ export class ExchangeRatesController {
   }
 
   @Get()
-  async getExchangeRates(): Promise<any> {
+  async getExchangeRates(@Query('currency') currency: string): Promise<any> {
     const response = await axios
       .get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
       .then((res) => res);
 
     const parsedXml = await this.parseXml(response.data);
     const cubeArr = parsedXml['gesmes:Envelope'].Cube.Cube.Cube;
+
     const rates = cubeArr.map((cube) => {
       return {
         name: cube['$'].currency,
         rate: cube['$'].rate,
       };
     });
+
+    let filteredRates = rates;
+    if (currency) {
+      filteredRates = rates.filter((rate) =>
+        rate.name.toLowerCase().includes(currency.toLowerCase()),
+      );
+    }
+
     const rateArr = cubeArr.map((cube) => {
       return {
         [cube['$'].currency]: cube['$'].rate,
@@ -40,7 +49,7 @@ export class ExchangeRatesController {
     return {
       date: parsedXml['gesmes:Envelope'].Cube.Cube.$.time,
       rate: rateArr,
-      rates: rates,
+      rates: filteredRates,
     };
   }
 }
