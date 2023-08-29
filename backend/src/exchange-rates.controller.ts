@@ -18,7 +18,10 @@ export class ExchangeRatesController {
   }
 
   @Get()
-  async getExchangeRates(@Query('currency') currency: string): Promise<any> {
+  async getExchangeRates(
+    @Query('currency') currency: string,
+    @Query('rate') rate: number, // Changed query parameter name to 'minRate'
+  ): Promise<any> {
     const response = await axios
       .get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
       .then((res) => res);
@@ -29,26 +32,30 @@ export class ExchangeRatesController {
     const rates = cubeArr.map((cube) => {
       return {
         name: cube['$'].currency,
-        rate: cube['$'].rate,
+        rate: parseFloat(cube['$'].rate),
       };
     });
 
+    const rateObj = cubeArr.reduce((acc, cube) => {
+      const currency = cube['$'].currency;
+      acc[currency] = parseFloat(cube['$'].rate);
+      return acc;
+    }, {});
+
     let filteredRates = rates;
     if (currency) {
-      filteredRates = rates.filter((rate) =>
+      filteredRates = filteredRates.filter((rate) =>
         rate.name.toLowerCase().includes(currency.toLowerCase()),
       );
     }
 
-    const rateArr = cubeArr.map((cube) => {
-      return {
-        [cube['$'].currency]: cube['$'].rate,
-      };
-    });
+    if (rate) {
+      filteredRates = filteredRates.filter((rateItem) => rateItem.rate >= rate);
+    }
 
     return {
       date: parsedXml['gesmes:Envelope'].Cube.Cube.$.time,
-      rate: rateArr,
+      rate: rateObj,
       rates: filteredRates,
     };
   }
