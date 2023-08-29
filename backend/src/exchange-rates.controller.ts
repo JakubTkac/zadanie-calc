@@ -1,8 +1,19 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import * as xml2js from 'xml2js';
 import axios from 'axios';
+import { ApiKeyGuard } from './api-key.guard';
+
+interface CurrencyRate {
+  name: string;
+  rate: number;
+}
+
+interface CurrencyRateObj {
+  [currency: string]: number;
+}
 
 @Controller('EU')
+@UseGuards(ApiKeyGuard)
 export class ExchangeRatesController {
   private parseXml(xml: Promise<string>): Promise<any> {
     const parser = new xml2js.Parser({ explicitArray: false });
@@ -30,20 +41,20 @@ export class ExchangeRatesController {
     const parsedXml = await this.parseXml(response.data);
     const cubeArr = parsedXml['gesmes:Envelope'].Cube.Cube.Cube;
 
-    const rates = cubeArr.map((cube) => {
+    const rates: CurrencyRate[] = cubeArr.map((cube) => {
       return {
         name: cube['$'].currency,
         rate: parseFloat(cube['$'].rate),
       };
     });
 
-    const rateObj = cubeArr.reduce((acc, cube) => {
+    const rateObj: CurrencyRateObj = cubeArr.reduce((acc, cube) => {
       const currency = cube['$'].currency;
       acc[currency] = parseFloat(cube['$'].rate);
       return acc;
     }, {});
 
-    let filteredRates = rates;
+    let filteredRates: CurrencyRate[] = rates;
     if (currency) {
       filteredRates = filteredRates.filter((rate) =>
         rate.name.toLowerCase().includes(currency.toLowerCase()),
