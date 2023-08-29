@@ -20,7 +20,8 @@ export class ExchangeRatesController {
   @Get()
   async getExchangeRates(
     @Query('currency') currency: string,
-    @Query('rate') rate: number, // Changed query parameter name to 'minRate'
+    @Query('rate') rate: number,
+    @Query('operation') operation: string = '$gt',
   ): Promise<any> {
     const response = await axios
       .get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
@@ -50,7 +51,19 @@ export class ExchangeRatesController {
     }
 
     if (rate) {
-      filteredRates = filteredRates.filter((rateItem) => rateItem.rate >= rate);
+      if (operation === '$gt') {
+        filteredRates = filteredRates.filter(
+          (rateItem) => rateItem.rate > rate,
+        );
+      } else if (operation === '$lt') {
+        filteredRates = filteredRates.filter(
+          (rateItem) => rateItem.rate < rate,
+        );
+      } else if (operation === '$eq') {
+        filteredRates = filteredRates.filter(
+          (rateItem) => rateItem.rate === rate,
+        );
+      }
     }
 
     return {
