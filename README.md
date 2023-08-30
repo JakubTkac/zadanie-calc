@@ -21,3 +21,15 @@ na frontend bol pouzity JS kniznica React na backend nodeJS framework NestJS
 4. npm run preview
 
 5. localhost:4173
+
+# Backend API
+
+prekonvertovany XML do JSON sa nachadza na adrese localhost:3000/EU
+
+na fetchnutie dat je potreba pridat api key do query URL ktory sa nachadza v api-key guard "f32e39c8-caeb-4444-bca0-1b1a6efb4b34" 
+
+http://localhost:3000/EU?api-key=f32e39c8-caeb-4444-bca0-1b1a6efb4b34
+
+data v rates[] Arr sa daju filtrovat pomocou currency="rates.name" alebo rate="rates.rate" operacia pre rate ide taktiez zmenit pomocou dalsieho query filtra operation="$gt|$lt|$eq" defaultne je nsatavena greater Then
+
+http://localhost:3000/EU?api-key=f32e39c8-caeb-4444-bca0-1b1a6efb4b34&rate=158&currency=J
