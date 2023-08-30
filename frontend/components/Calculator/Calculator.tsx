@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import Label from "../Common/Label";
 import { IoSwapHorizontal } from "react-icons/io5";
-import CalculatorItems from "./CalculatorItems";
-import Select from "../Common/Select";
+import Select, { IRate } from "../Common/Select";
 import { useEffect, useState } from "react";
 import Button from "../Common/Button";
 import { COLOR, FONT_SIZE, SCREENS } from "../../Theme";
@@ -104,6 +103,14 @@ const StyledButtonWrapper = styled.div`
   }
 `;
 
+interface ICalculatorData {
+  date: string;
+  rate: {
+    [currencyCode: string]: number;
+  };
+  rates: IRate[];
+}
+
 const Calculator = () => {
   const [selectedAmountRate, setSelectedAmountRate] = useState<number | null>(
     null,
@@ -116,6 +123,8 @@ const Calculator = () => {
     useState<string>("");
   const [calculatedResult, setCalculatedResult] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState<number>(1);
+  const [calculatorItems, setCalculatorItems] =
+    useState<ICalculatorData | null>(null);
 
   const handleSelectedAmountRate = (selectedRate: number) => {
     setSelectedAmountRate(selectedRate);
@@ -141,6 +150,22 @@ const Calculator = () => {
   useEffect(() => {
     handleCalculate();
   }, [inputValue, selectedCalculationRate]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/EU?api-key=f32e39c8-caeb-4444-bca0-1b1a6efb4b34",
+      );
+      const data = await response.json();
+      setCalculatorItems(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -179,7 +204,7 @@ const Calculator = () => {
                 {calculatedResult !== null ? calculatedResult.toFixed(2) : ""}
               </span>
               <Select
-                data={CalculatorItems.rates}
+                data={calculatorItems?.rates || []}
                 disabled={false}
                 onSelectRate={handleSelectedCalculationRate}
                 onSelectName={handleSelectedCalculationName}
